@@ -8,7 +8,6 @@ import lombok.*;
 public class Device {
 
     @Id
-    @Column(length = 250)
     private String device_id;
     @Column(length = 100)
     private String device_name;
