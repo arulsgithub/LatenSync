@@ -17,6 +17,6 @@ public class Alert {
     private double threshold_exceeded;
     @Column(length = 50)
     private String alert_level;
-    @Column(length = 50)
+    @Column(length = 200)
     private String message;
 }

@@ -4,19 +4,18 @@ import com.internproject.LatenSync.entity.Device;
 import com.internproject.LatenSync.exception.ResourceNotFoundException;
 import com.internproject.LatenSync.repository.DeviceRepository;
 import com.internproject.LatenSync.service.DeviceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Component
 @Service
 public class DeviceServiceImpl implements DeviceService {
 
-    private final DeviceRepository deviceRepository;
-
-    public DeviceServiceImpl(DeviceRepository deviceRepository){
-        super();
-        this.deviceRepository=deviceRepository;
-    }
+    @Autowired
+    DeviceRepository deviceRepository;
 
     @Override
     public Device addDevice(Device device) {
@@ -33,4 +32,11 @@ public class DeviceServiceImpl implements DeviceService {
         deviceRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Device","Id",id));
         deviceRepository.deleteById(id);
     }
+
+    @Override
+    public Device getDeviceById(String id) {
+        return deviceRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Device","Id",id));
+    }
+
+
 }

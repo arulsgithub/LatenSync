@@ -2,22 +2,21 @@ package com.internproject.LatenSync.controller;
 
 import com.internproject.LatenSync.entity.Device;
 import com.internproject.LatenSync.service.DeviceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/devices")
+@Component
 public class DeviceController {
 
-    private final DeviceService deviceService;
-
-    public DeviceController(DeviceService deviceService){
-        super();
-        this.deviceService=deviceService;
-    }
+    @Autowired
+    DeviceService deviceService;
 
     @GetMapping
     public List<Device> listAllDevice(){
@@ -32,5 +31,9 @@ public class DeviceController {
     public ResponseEntity<String> removeDevice(@PathVariable("id") String d_id){
         deviceService.removeDevice(d_id);
         return new ResponseEntity<>("Device removed successfully",HttpStatus.OK);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Device> getDeviceById(@PathVariable("id") String d_id){
+        return new ResponseEntity<>(deviceService.getDeviceById(d_id),HttpStatus.FOUND);
     }
 }
