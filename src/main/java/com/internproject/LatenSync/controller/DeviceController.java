@@ -28,4 +28,9 @@ public class DeviceController {
     public ResponseEntity<Device> addDevice(@RequestBody Device device){
         return new ResponseEntity<>(deviceService.addDevice(device), HttpStatus.CREATED);
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> removeDevice(@PathVariable("id") String d_id){
+        deviceService.removeDevice(d_id);
+        return new ResponseEntity<>("Device removed successfully",HttpStatus.OK);
+    }
 }

@@ -8,4 +8,5 @@ public interface DeviceService {
 
     public Device addDevice(Device device);
     public List<Device> getAllDevice();
+    public void removeDevice(String id);
 }
