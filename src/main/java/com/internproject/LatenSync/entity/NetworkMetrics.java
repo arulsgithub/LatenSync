@@ -3,6 +3,9 @@ package com.internproject.LatenSync.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
+import java.time.ZonedDateTime;
+
 @Data
 //@Getter
 //@Setter
@@ -21,4 +24,5 @@ public class NetworkMetrics {
     private double jitter;
     @Column(length = 50)
     private String status;
+    private Timestamp timestamp;
 }

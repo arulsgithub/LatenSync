@@ -1,6 +1,7 @@
 package com.internproject.LatenSync.controller;
 
 import com.internproject.LatenSync.entity.NetworkMetrics;
+import com.internproject.LatenSync.service.DataCollectionService;
 import com.internproject.LatenSync.service.NetworkMetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,24 +17,16 @@ import java.util.List;
 public class NetworkMetricsController {
 
     @Autowired
-    NetworkMetricsService networkMetricsService;
+    private DataCollectionService dataCollectionService;
+    @Autowired
+    private NetworkMetricsService networkMetricsService;
 
-    @GetMapping
-    public List<NetworkMetrics> listAllDevice(){
-        return networkMetricsService.getAllMetrics();
+
+    @GetMapping("/collect/{deviceId}")
+    public ResponseEntity<List<NetworkMetrics>> collectMetrics(@PathVariable String deviceId) throws Exception {
+            dataCollectionService.collectMetrics(deviceId);
+            List<NetworkMetrics> metrics = networkMetricsService.getAllMetrics();
+            return new ResponseEntity<>(metrics, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<NetworkMetrics> addDevice(@RequestBody NetworkMetrics metrics){
-        return new ResponseEntity<>(networkMetricsService.addMetrics(metrics), HttpStatus.CREATED);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> removeDevice(@PathVariable("id") Long d_id){
-        networkMetricsService.removeMetrics(d_id);
-        return new ResponseEntity<>("Device removed successfully",HttpStatus.OK);
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<NetworkMetrics> getDeviceById(@PathVariable("id") Long d_id){
-        return new ResponseEntity<>(networkMetricsService.getMetricsById(d_id),HttpStatus.FOUND);
-    }
 }
