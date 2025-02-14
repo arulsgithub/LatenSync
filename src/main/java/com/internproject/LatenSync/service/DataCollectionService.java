@@ -7,5 +7,6 @@ public interface DataCollectionService {
     double getLatency(String ping_str);
     double getJitter();
     void collectMetrics(String device_id) throws Exception;
-    public String run(String ip_addr) throws Exception;
+    String run(String ip_addr) throws Exception;
+    void stopMonitoring(String deviceId);
 }

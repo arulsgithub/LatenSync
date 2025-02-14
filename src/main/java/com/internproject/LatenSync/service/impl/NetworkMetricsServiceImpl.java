@@ -34,7 +34,8 @@ public class NetworkMetricsServiceImpl implements NetworkMetricsService {
     }
 
     @Override
-    public NetworkMetrics getMetricsById(Long id) {
-        return networkMetricsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Metrics","Id",id));
+    public List<NetworkMetrics> getMetricsByDeviceId(String deviceId) {
+        return networkMetricsRepository.findByDeviceId(deviceId);
     }
+
 }

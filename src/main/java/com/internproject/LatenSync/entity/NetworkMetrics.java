@@ -7,17 +7,14 @@ import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 
 @Data
-//@Getter
-//@Setter
-//@AllArgsConstructor
 @Entity
 public class NetworkMetrics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(length = 250)
-    private String device_id;
+    @Column(length = 250, name = "device_id")
+    private String deviceId;
     private double latency;
     private double packet_loss;
     private double throughput;

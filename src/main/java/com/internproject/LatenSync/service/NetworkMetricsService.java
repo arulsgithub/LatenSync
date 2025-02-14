@@ -10,5 +10,5 @@ public interface NetworkMetricsService {
     NetworkMetrics addMetrics(NetworkMetrics metrics);
     List<NetworkMetrics> getAllMetrics();
     void removeMetrics(Long id);
-    NetworkMetrics getMetricsById(Long id);
+    List<NetworkMetrics> getMetricsByDeviceId(String deviceId);
 }
