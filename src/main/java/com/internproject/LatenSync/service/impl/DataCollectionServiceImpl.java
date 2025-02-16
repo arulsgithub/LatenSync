@@ -118,4 +118,10 @@ public class DataCollectionServiceImpl implements DataCollectionService {
             System.out.println("No active monitoring found for device: " + deviceId);
         }
     }
+
+    @Override
+    public boolean isMonitoring(String deviceId) {
+        return activeTasks.containsKey(deviceId);
+    }
+
 }

@@ -9,4 +9,6 @@ public interface DataCollectionService {
     void collectMetrics(String device_id) throws Exception;
     String run(String ip_addr) throws Exception;
     void stopMonitoring(String deviceId);
+
+    boolean isMonitoring(String deviceId);
 }

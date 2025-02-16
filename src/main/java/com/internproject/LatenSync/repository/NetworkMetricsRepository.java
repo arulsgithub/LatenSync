@@ -8,4 +8,3 @@ import java.util.List;
 public interface NetworkMetricsRepository extends JpaRepository<NetworkMetrics, Long> {
     List<NetworkMetrics> findByDeviceId(String deviceId);
 }
-
