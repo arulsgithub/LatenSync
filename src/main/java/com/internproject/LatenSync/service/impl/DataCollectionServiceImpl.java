@@ -42,7 +42,7 @@ public class DataCollectionServiceImpl implements DataCollectionService {
 
     @Override
     public String run(String ip_addr) throws IOException {
-        Process process = Runtime.getRuntime().exec("ping -n 5 " + ip_addr);
+        Process process = Runtime.getRuntime().exec("ping -n 1 " + ip_addr);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder sb = new StringBuilder();
         String line;
@@ -87,7 +87,7 @@ public class DataCollectionServiceImpl implements DataCollectionService {
                 String pingData = run(deviceIp);
                 double latency = getLatency(pingData);
                 double packetLoss = getPacketLoss(pingData);
-                String status = (latency > 120 || packetLoss > 5) ? "Poor" : "Good";
+                String status = (latency > 80 || packetLoss > 3) ? "Poor" : "Good";
 
                 NetworkMetrics metrics = new NetworkMetrics();
                 metrics.setDeviceId(deviceId);
@@ -103,7 +103,7 @@ public class DataCollectionServiceImpl implements DataCollectionService {
             } catch (Exception e) {
                 System.err.println("Error collecting metrics for device " + deviceId + ": " + e.getMessage());
             }
-        }, 10000); // Runs every 10 seconds
+        }, 1000); //1 secs
 
         activeTasks.put(deviceId, future);
     }

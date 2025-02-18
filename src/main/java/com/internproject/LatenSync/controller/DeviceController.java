@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/devices")
 @Component
@@ -18,9 +19,14 @@ public class DeviceController {
     @Autowired
     DeviceService deviceService;
 
+//    @GetMapping
+//    public List<Device> listAllDevice(){
+//        return deviceService.getAllDevice();
+//    }
+
     @GetMapping
-    public List<Device> listAllDevice(){
-        return deviceService.getAllDevice();
+    public ResponseEntity<List<String>> listAllDeviceIds(){
+        return new ResponseEntity<>(deviceService.getAllDeviceIds(), HttpStatus.OK);
     }
 
     @PostMapping("/add")

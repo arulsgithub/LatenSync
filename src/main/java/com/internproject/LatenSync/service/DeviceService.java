@@ -7,7 +7,8 @@ import java.util.List;
 public interface DeviceService {
 
     Device addDevice(Device device);
-    List<Device> getAllDevice();
+    //List<Device> getAllDevice();
+    List<String> getAllDeviceIds();
     void removeDevice(String id);
     Device getDeviceById(String id);
 

@@ -1,6 +1,5 @@
 package com.internproject.LatenSync.service.impl;
 
-import com.internproject.LatenSync.entity.Device;
 import com.internproject.LatenSync.entity.NetworkMetrics;
 import com.internproject.LatenSync.exception.ResourceNotFoundException;
 import com.internproject.LatenSync.repository.NetworkMetricsRepository;

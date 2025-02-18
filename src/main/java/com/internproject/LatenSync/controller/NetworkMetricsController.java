@@ -9,36 +9,32 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/metrics")
 public class NetworkMetricsController {
 
     @Autowired
     private DataCollectionService dataCollectionService;
-
     @Autowired
     private NetworkMetricsService networkMetricsService;
 
-    // Start monitoring a device
     @PostMapping("/start/{deviceId}")
     public ResponseEntity<String> startMonitoring(@PathVariable String deviceId) throws Exception {
         dataCollectionService.collectMetrics(deviceId);
         return ResponseEntity.ok("Monitoring started for device: " + deviceId);
     }
 
-    // Stop monitoring a device
     @PostMapping("/stop/{deviceId}")
     public ResponseEntity<String> stopMonitoring(@PathVariable String deviceId) {
         dataCollectionService.stopMonitoring(deviceId);
         return ResponseEntity.ok("Monitoring stopped for device: " + deviceId);
     }
 
-    // Get all collected metrics
     @GetMapping("/all")
     public ResponseEntity<List<NetworkMetrics>> getAllMetrics() {
         List<NetworkMetrics> metrics = networkMetricsService.getAllMetrics();
@@ -56,7 +52,6 @@ public class NetworkMetricsController {
 
     private final CopyOnWriteArrayList<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
-    // Start monitoring and stream data in real-time
     @GetMapping(value = "/stream/{deviceId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamMetrics(@PathVariable String deviceId) {
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
@@ -67,9 +62,9 @@ public class NetworkMetricsController {
                 while (dataCollectionService.isMonitoring(deviceId)) {
                     List<NetworkMetrics> latestMetrics = networkMetricsService.getMetricsByDeviceId(deviceId);
                     if (!latestMetrics.isEmpty()) {
-                        emitter.send(latestMetrics.get(latestMetrics.size() - 1));
+                        emitter.send(latestMetrics.getLast());
                     }
-                    Thread.sleep(5000); // Send updates every 5 seconds
+                    Thread.sleep(1200);
                 }
             } catch (IOException | InterruptedException e) {
                 emitter.completeWithError(e);
