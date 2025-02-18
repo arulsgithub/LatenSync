@@ -1,0 +1,69 @@
+.Form-table{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.Form-head{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+.Form-container{
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    width: 350px;
+
+}
+.Form{
+    margin-bottom: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+.Form-label{
+
+    font-weight: bold;
+    margin-bottom: 5px; 
+    text-align: left; /* Ensures text is left-aligned */
+    padding: 5px;
+
+
+
+
+}
+
+.Form-input{
+    display: flex; 
+    flex-direction: column; 
+    align-items: start;
+    width: 250px;
+    padding: 8px;
+    border-radius: 5px;
+    text-align:center;
+}
+
+.Form-button{
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 50%;
+}
