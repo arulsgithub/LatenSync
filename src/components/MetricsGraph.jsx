@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
@@ -26,7 +25,6 @@ export default function MetricsGraph({ deviceId, metric }) {
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
       <h2 className="text-center text-xl font-semibold mb-4">
-  
         {metric.charAt(0).toUpperCase() + metric.slice(1)} for Device:{" "}
         {deviceId}
       </h2>
@@ -46,9 +44,3 @@ export default function MetricsGraph({ deviceId, metric }) {
     </div>
   );
 }
-
-MetricsGraph.propTypes = {
-  deviceId: PropTypes.string.isRequired,
-  metric: PropTypes.string.isRequired,
-};
-

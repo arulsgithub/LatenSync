@@ -47,14 +47,12 @@ const DeviceForm = () => {
   };
 
   return (
-    <div className="Form-table">
-      <form className="Form-container" onSubmit={handleSubmit}>
+    <div className="Form-table bg-[#153448]  min-h-screen text-white poppins-bold">
+      <form className="Form-container bg-[#3C5B6F]" onSubmit={handleSubmit}>
         <h3 className="Form-head">Device Management</h3>
         {Object.keys(formData).map((key) => (
           <div key={key} className="Form">
-            <label className="Form-label">
-              {key.replace("_", " ").toUpperCase()}:
-            </label>
+            <label className="Form-label">{key.replace("_", " ")}:</label>
             <input
               type="text"
               name={key}
@@ -65,7 +63,7 @@ const DeviceForm = () => {
             />
           </div>
         ))}
-        <button type="submit" className="Form-button">
+        <button type="submit" className="Form-button bg-[#948979]">
           Add Device
         </button>
       </form>

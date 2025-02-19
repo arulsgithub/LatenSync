@@ -10,7 +10,7 @@ function App() {
   return (
     <div>
       <NavBar />
-      <main className="main-content">
+      <main className="poppins-semibold bg-[#153448]">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/devices" element={<Devices />} />

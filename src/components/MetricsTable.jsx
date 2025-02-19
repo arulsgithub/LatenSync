@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-// eslint-disable-next-line react/prop-types
 export default function MetricsTable({ setSelectedDevice, setSelectedMetric }) {
   const [metrics, setMetrics] = useState([]);
   const [deviceIds, setDeviceIds] = useState([]);
@@ -69,8 +68,8 @@ export default function MetricsTable({ setSelectedDevice, setSelectedMetric }) {
   }, [deviceIds]);
 
   return (
-    <div className=" bg-gray-800 p-4 rounded-lg shadow-lg">
-      <table className="w-full border-collapse text-white">
+    <div className="bg-gray-800 p-4 rounded-lg shadow-lg ">
+      <table className=" w-full border-collapse text-white">
         <thead>
           <tr className="bg-gray-700 text-white">
             <th className="p-3">Device ID</th>
@@ -80,7 +79,7 @@ export default function MetricsTable({ setSelectedDevice, setSelectedMetric }) {
             <th className="p-3">Jitter</th>
           </tr>
         </thead>
-        <tbody className="overflow-scroll">
+        <tbody>
           {metrics.length > 0 ? (
             metrics.map((m) => (
               <tr

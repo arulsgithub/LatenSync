@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.poppins-semibold {
+    font-family: "Poppins", serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+  
