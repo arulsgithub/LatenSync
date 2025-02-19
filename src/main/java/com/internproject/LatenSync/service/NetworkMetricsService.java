@@ -1,6 +1,6 @@
+
 package com.internproject.LatenSync.service;
 
-import com.internproject.LatenSync.entity.Device;
 import com.internproject.LatenSync.entity.NetworkMetrics;
 
 import java.util.List;
