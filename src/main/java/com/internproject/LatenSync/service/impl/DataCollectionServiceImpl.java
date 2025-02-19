@@ -123,5 +123,4 @@ public class DataCollectionServiceImpl implements DataCollectionService {
     public boolean isMonitoring(String deviceId) {
         return activeTasks.containsKey(deviceId);
     }
-
 }
