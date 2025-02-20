@@ -6,20 +6,25 @@ export default function MetricsGraph({ deviceId, metric }) {
   const [graphData, setGraphData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/metrics/device/${deviceId}`)
-      .then((res) => res.json())
-      .then((metrics) => {
-        const labels = metrics.map((m) =>
-          new Date(m.timestamp).toLocaleTimeString()
-        );
+    const fetchMetrics = () => {
+      fetch(`http://localhost:8080/api/metrics/device/${deviceId}`)
+        .then((res) => res.json())
+        .then((metrics) => {
+          const recentMetrics = metrics.slice(-20);
+          const labels = recentMetrics.map((_, index) => index * 5);
 
-        const metricData = metrics.map((m) => m[metric]);
+          const metricData = metrics.map((m) => m[metric]);
 
-        setGraphData({
-          labels,
-          data: metricData,
+          setGraphData({
+            labels,
+            data: metricData,
+          });
         });
-      });
+    };
+    fetchMetrics();
+    const interval = setInterval(fetchMetrics, 15000);
+
+    return () => clearInterval(interval);
   }, [deviceId, metric]);
 
   return (

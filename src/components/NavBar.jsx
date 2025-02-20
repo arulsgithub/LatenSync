@@ -5,6 +5,8 @@ import { TiCloudStorage, TiChartPie } from "react-icons/ti";
 import { TbAlertCircle } from "react-icons/tb";
 import { IoMdArrowRoundBack } from "react-icons/io"; // Importing icons
 import "../css/navbar.css"; // Ensure you style accordingly
+import { LuRouter } from "react-icons/lu";
+import { LuChartNoAxesCombined } from "react-icons/lu";
 
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +39,16 @@ function NavBar() {
               <FaHome size={24} />
             )}
           </Link>
+          <Link to="/devicepage" className="nav-link p-20 ">
+            {isOpen ? (
+              <div className="flex flex-row">
+                <LuChartNoAxesCombined size={24} />
+                <p className="pl-2">Device page</p>
+              </div>
+            ) : (
+              <LuChartNoAxesCombined size={24} />
+            )}
+          </Link>
           <Link to="/devices" className="nav-link">
             {isOpen ? (
               <div className="flex flex-row">
@@ -57,7 +69,7 @@ function NavBar() {
               <TbAlertCircle size={24} />
             )}
           </Link>
-          <Link to="/dashboard" className="nav-link">
+          <Link to="/dashboard" className="nav-link p-0">
             {isOpen ? (
               <div className="flex flex-row">
                 <TiChartPie size={24} />
