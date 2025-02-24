@@ -1,13 +1,15 @@
 import { useState } from "react";
 import MetricsTable from "../components/MetricsTable";
 import MetricsGraph from "../components/MetricsGraph";
+import NavBar from "../components/NavBar";
 
 export default function Dashboard() {
   const [selectedDevice, setSelectedDevice] = useState(null);
   const [selectedMetric, setSelectedMetric] = useState(null);
 
   return (
-    <div className="bg-[#153448] min-h-screen pl-20 pr-5 text-white">
+    <div className="bg-[#fff] min-h-screen pl-20 pr-5 text-white">
+      <NavBar />
       <h1 className="text-3xl font-bold text-center mb-6">
         Network Metrics Dashboard
       </h1>

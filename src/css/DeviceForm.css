@@ -1,69 +1,70 @@
-.Form-table{
+.Form-table {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
+    padding-left: 100px;
+    padding-top: 80px;
+    background-color: #ffffff;
 }
 
-.Form-head{
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-
-
-
-
-
-.Form-container{
-  
+.Form-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    width: 350px;
-
+    width: 500px; /* Increased width for two columns */
+    background-color: #3C5B6F;
 }
-.Form{
-    margin-bottom: 15px;
+
+.Form-head {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* ✅ Two-column grid layout */
+.Form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px; /* Creates spacing between columns */
     width: 100%;
+}
+
+/* ✅ Ensures labels and inputs are aligned properly */
+.Form {
     display: flex;
     flex-direction: column;
     align-items: start;
 }
-.Form-label{
 
+.Form-label {
     font-weight: bold;
-    margin-bottom: 5px; 
-    text-align: left; /* Ensures text is left-aligned */
-    padding: 5px;
-
-
-
-
+    margin-bottom: 5px;
+    color: white;
 }
 
-.Form-input{
-    display: flex; 
-    flex-direction: column; 
-    align-items: start;
-    width: 250px;
+.Form-input {
+    width: 100%;
     padding: 8px;
     border-radius: 5px;
-    text-align:center;
+    border: 1px solid #ccc;
+    background-color: #3C5B6F;
+    color: white;
+    text-align: left; /* Keeps text aligned properly */
 }
 
-.Form-button{
-   
+/* ✅ Button styling */
+.Form-button {
     color: white;
-    padding: 10px 15px;
+    background-color: #007bff;
+    padding: 10px;
+    padding-left: 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
-    width: 50%;
+   
+    width: 100%;
+    margin-top: 20px;
 }

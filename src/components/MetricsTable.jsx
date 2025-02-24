@@ -68,7 +68,7 @@ export default function MetricsTable({ setSelectedDevice, setSelectedMetric }) {
   }, [deviceIds]);
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-lg ">
+    <div className="bg-[#3C5B6F] p-4 rounded-lg shadow-lg ">
       <table className=" w-full border-collapse text-white">
         <thead>
           <tr className="bg-gray-700 text-white">
@@ -77,9 +77,10 @@ export default function MetricsTable({ setSelectedDevice, setSelectedMetric }) {
             <th className="p-3">Packet Loss</th>
             <th className="p-3">Throughput</th>
             <th className="p-3">Jitter</th>
+            <th className="p-3">Status</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-center">
           {metrics.length > 0 ? (
             metrics.map((m) => (
               <tr
@@ -130,6 +131,9 @@ export default function MetricsTable({ setSelectedDevice, setSelectedMetric }) {
                   }}
                 >
                   {m.jitter}
+                </td>
+                <td className="p-3 cursor-pointer hover:bg-gray-600">
+                  {m.status}
                 </td>
               </tr>
             ))

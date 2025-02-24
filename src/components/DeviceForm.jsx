@@ -47,26 +47,35 @@ const DeviceForm = () => {
   };
 
   return (
-    <div className="Form-table bg-[#153448]  min-h-screen text-white poppins-bold">
-      <form className="Form-container bg-[#3C5B6F]" onSubmit={handleSubmit}>
-        <h3 className="Form-head">Device Management</h3>
-        {Object.keys(formData).map((key) => (
-          <div key={key} className="Form">
-            <label className="Form-label">{key.replace("_", " ")}:</label>
-            <input
-              type="text"
-              name={key}
-              placeholder={`Enter ${key.replace("_", " ")}`}
-              value={formData[key]}
-              onChange={handleChange}
-              className="Form-input"
-            />
+    <div>
+      <h1 className="text-center pt-15 poppins-bold text-[25px]">
+        Device management
+      </h1>
+      <div className="Form-table bg-[#fff]">
+        <form className="Form-container" onSubmit={handleSubmit}>
+          <h3 className="Form-head"></h3>
+
+          <div className="Form-grid">
+            {Object.keys(formData).map((key, index) => (
+              <div key={key} className="Form">
+                <label className="Form-label">{key.replace("_", " ")}:</label>
+                <input
+                  type="text"
+                  name={key}
+                  placeholder={`Enter ${key.replace("_", " ")}`}
+                  value={formData[key]}
+                  onChange={handleChange}
+                  className="Form-input"
+                />
+              </div>
+            ))}
           </div>
-        ))}
-        <button type="submit" className="Form-button bg-[#948979]">
-          Add Device
-        </button>
-      </form>
+
+          <button type="submit" className="Form-button">
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

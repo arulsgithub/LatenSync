@@ -81,11 +81,6 @@ function NavBar() {
           </Link>
         </div>
       </div>
-
-      {/* Main Content Placeholder */}
-      <div className="flex-1 p-5 ml-16">
-        <h1 className="text-2xl">Main Content</h1>
-      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DeviceForm from "../components/DeviceForm";
+import NavBar from "../components/NavBar";
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
@@ -53,8 +54,15 @@ const Devices = () => {
 
   return (
     <div>
-      <DeviceForm></DeviceForm>
-
+      <NavBar />
+      <div className="grid grid-col-3 bg-[#fff]">
+        <div>
+          <DeviceForm></DeviceForm>
+        </div>
+        <div className=" text-black">
+          <p>Or</p>
+        </div>
+      </div>
       {/*<div className="bg-white p-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold mb-2">Device List</h3>
         <table className="w-full border-collapse border">
