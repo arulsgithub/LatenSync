@@ -31,7 +31,7 @@ public class Device {
 
     @Column(name = "user_name", length = 100)
     @JsonProperty("user_name")
-    private String userName;
+    private String username;
 
 
     @ManyToOne

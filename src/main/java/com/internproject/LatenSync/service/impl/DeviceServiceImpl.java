@@ -22,13 +22,13 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Device addDevice(Device device) {
-        if (device.getUserName() == null || device.getUserName().isEmpty()) {
+        if (device.getUsername() == null || device.getUsername().isEmpty()) {
             throw new IllegalArgumentException("UserName must not be null or empty");
         }
 
-        User user = userRepository.findByUserName(device.getUserName());
+        User user = userRepository.findByUserName(device.getUsername());
         if (user == null) {
-            throw new ResourceNotFoundException("User", "UserName", device.getUserName());
+            throw new ResourceNotFoundException("User", "UserName", device.getUsername());
         }
 
         device.setUser(user);

@@ -23,13 +23,13 @@ public class UserPrinciple implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return user.getPassword();
+    public String getUsername() {
+        return user.getUserName();
     }
 
     @Override
-    public String getUsername() {
-        return user.getUserName();
+    public String getPassword() {
+        return user.getPassword();
     }
 
     @Override
