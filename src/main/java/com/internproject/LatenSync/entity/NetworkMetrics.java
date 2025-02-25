@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 @Entity
 public class NetworkMetrics {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

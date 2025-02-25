@@ -9,8 +9,23 @@ import com.internproject.LatenSync.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+
+
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+
+
 
 @Service
 public class DeviceServiceImpl implements DeviceService {
@@ -26,14 +41,16 @@ public class DeviceServiceImpl implements DeviceService {
             throw new IllegalArgumentException("UserName must not be null or empty");
         }
 
-        User user = userRepository.findByUserName(device.getUserName());
-        if (user == null) {
-            throw new ResourceNotFoundException("User", "UserName", device.getUserName());
-        }
-
-        device.setUser(user);
+//        User user = userRepository.findByUserName(device.getUserName());
+//        if (user == null) {
+//            throw new ResourceNotFoundException("User", "UserName", device.getUserName());
+//        }
+//
+//        device.setUser(user);
         return deviceRepository.save(device);
     }
+
+
 
 
     @Override
@@ -58,4 +75,60 @@ public class DeviceServiceImpl implements DeviceService {
     public List<Device> getDevicesByUserName(String userName) {
         return deviceRepository.findByUser_UserName(userName);
     }
+
+    @Override
+    public Long getDeviceCount() {
+        return deviceRepository.count();
+    }
+
+    @Override
+    public List<Device> parseAndSaveExcel(MultipartFile file) throws IOException {
+        List<Device> devices = new ArrayList<>();
+        InputStream inputStream = file.getInputStream();
+        Workbook workbook = new XSSFWorkbook(inputStream);
+        Sheet sheet = workbook.getSheetAt(0); // Get first sheet
+
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) continue; // Skip header row
+
+            Device device = new Device();
+            device.setDevice_id(getStringCellValue(row.getCell(0)));
+            device.setDevice_name(getStringCellValue(row.getCell(1)));
+            device.setDevice_type(getStringCellValue(row.getCell(2)));
+            device.setIp_addr(getStringCellValue(row.getCell(3)));
+            device.setMac_addr(getStringCellValue(row.getCell(4)));
+            device.setLocation(getStringCellValue(row.getCell(5)));
+
+            devices.add(device);
+        }
+
+        workbook.close();
+
+        // Save all devices in DB
+        return deviceRepository.saveAll(devices);
+    }
+    private String getStringCellValue(Cell cell) {
+        if (cell == null) return "";
+
+        switch (cell.getCellType()) {
+            case STRING:
+                return cell.getStringCellValue();
+            case NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    return cell.getDateCellValue().toString();
+                } else {
+                    return String.valueOf((long) cell.getNumericCellValue()); // Convert to long to avoid decimals
+                }
+            case BOOLEAN:
+                return Boolean.toString(cell.getBooleanCellValue());
+            case FORMULA:
+                return cell.getCellFormula();
+            case BLANK:
+                return "";
+            default:
+                return cell.toString();
+        }
+    }
+
 }
+

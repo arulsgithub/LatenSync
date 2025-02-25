@@ -1,8 +1,13 @@
 package com.internproject.LatenSync.service.impl;
 
+
+
+import com.internproject.LatenSync.entity.Alert;
 import com.internproject.LatenSync.entity.Device;
 import com.internproject.LatenSync.entity.NetworkMetrics;
+import com.internproject.LatenSync.repository.AlertRepository;
 import com.internproject.LatenSync.repository.NetworkMetricsRepository;
+import com.internproject.LatenSync.webSocket.WebSocketNotificationService;
 import com.internproject.LatenSync.service.DataCollectionService;
 import com.internproject.LatenSync.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +29,12 @@ public class DataCollectionServiceImpl implements DataCollectionService {
 
     @Autowired
     private NetworkMetricsRepository networkMetricsRepository;
-
+    @Autowired
+   private AlertRepository alertRepository;
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private WebSocketNotificationService webSocketNotificationService;
 
     private final ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();
     private final ConcurrentHashMap<String, ScheduledFuture<?>> activeTasks = new ConcurrentHashMap<>();
@@ -37,7 +45,8 @@ public class DataCollectionServiceImpl implements DataCollectionService {
 
     @Override
     public double getThroughput() {
-        return new Random().nextDouble() * 88;
+        Random random=new Random();
+        return (double) Math.round(random.nextDouble()*8800)/100;
     }
 
     @Override
@@ -69,7 +78,8 @@ public class DataCollectionServiceImpl implements DataCollectionService {
 
     @Override
     public double getJitter() {
-        return new Random().nextDouble() * 22;
+        Random random=new Random();
+        return (double)Math.round(random.nextDouble()*2200)/100;
     }
 
     @Override
@@ -87,12 +97,14 @@ public class DataCollectionServiceImpl implements DataCollectionService {
                 String pingData = run(deviceIp);
                 double latency = getLatency(pingData);
                 double packetLoss = getPacketLoss(pingData);
-                String status = (latency > 80 || packetLoss > 3) ? "Poor" : "Good";
-
+                double jitter=getJitter();
+                double throughput=getThroughput();
+                String status = getDeviceStatus(latency,packetLoss,jitter,throughput);
+                if(status.equals("Bad")){ sendAlert(deviceId);}
                 NetworkMetrics metrics = new NetworkMetrics();
                 metrics.setDeviceId(deviceId);
-                metrics.setJitter(getJitter());
-                metrics.setThroughput(getThroughput());
+                metrics.setJitter(jitter);
+                metrics.setThroughput(throughput);
                 metrics.setStatus(status);
                 metrics.setLatency(latency);
                 metrics.setPacket_loss(packetLoss);
@@ -123,4 +135,28 @@ public class DataCollectionServiceImpl implements DataCollectionService {
     public boolean isMonitoring(String deviceId) {
         return activeTasks.containsKey(deviceId);
     }
+
+    @Override
+    public String getDeviceStatus(double latency,double packetLoss,double jitter, double throughput) {
+        if(latency ==0 && packetLoss==0) return "Excellent";
+        else if((latency>0&&latency<=50) && (packetLoss>0&&packetLoss<=50)) return "Good";
+        else return "Bad";
+    }
+
+    @Override
+    public void sendAlert(String device_id) {
+        Alert alert = new Alert();
+        alert.setDevice_id(device_id);
+        alert.setMessage("Critical alert for device " + device_id );
+        alert.setTime(Timestamp.valueOf(LocalDateTime.now()));
+
+        alertRepository.save(alert);
+
+
+        webSocketNotificationService.sendNotification(device_id, alert.getMessage());
+
+
+        webSocketNotificationService.sendBroadcastNotification(alert.getMessage());
+    }
 }
+
