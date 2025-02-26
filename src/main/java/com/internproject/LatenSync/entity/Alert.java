@@ -3,6 +3,8 @@ package com.internproject.LatenSync.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @Data
 @Entity
 public class Alert {
@@ -12,11 +14,7 @@ public class Alert {
     private Long Alert_id;
     @Column(length = 250)
     private String device_id;
-    @Column(length = 300)
-    private String metric_affected;
-    private double threshold_exceeded;
-    @Column(length = 50)
-    private String alert_level;
+    private Timestamp time;
     @Column(length = 200)
     private String message;
 }

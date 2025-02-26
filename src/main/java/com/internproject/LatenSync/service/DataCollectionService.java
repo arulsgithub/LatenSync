@@ -11,4 +11,7 @@ public interface DataCollectionService {
     void stopMonitoring(String deviceId);
 
     boolean isMonitoring(String deviceId);
+
+    String getDeviceStatus(double latency,double packetLoss,double jitter,double throughput);
+    void sendAlert(String device_id);
 }

@@ -33,6 +33,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/wss/**").permitAll() // Allow WebSocket connections
+                        .requestMatchers("/topic/**").permitAll() // Allow STOMP subscriptions
+                        .requestMatchers("/app/**").permitAll() // Allow message destinations
+                        .requestMatchers("/user/**").permitAll() // Allow user destinations
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -56,9 +60,9 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Allow frontend origin
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // Allow specific methods
-        configuration.setAllowCredentials(true); // Allow credentials (e.g., Authorization header)
-        configuration.addAllowedHeader("*"); // Allow all headers
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Apply to all endpoints
         return source;
