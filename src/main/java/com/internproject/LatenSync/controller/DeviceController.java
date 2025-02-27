@@ -65,6 +65,31 @@ public class DeviceController {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Device>> listDevices() {
+        // Get the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+
+        String username = authentication.getName();
+
+        User user = userService.getUserByUserName(username);
+
+        String userType = user.getUser_type();  // Now we have the user_type
+
+        if ("user".equals(userType)) {
+            // Fetch devices for the current user
+            List<Device> devices = deviceService.getDevicesByUserName(username);
+            return ResponseEntity.ok(devices);
+        } else if ("admin".equals(userType)) {
+            return new ResponseEntity<>(deviceService.getAllDevices(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NOT_FOUND);
+    }
 
 
     @PostMapping("/add")
@@ -126,6 +151,7 @@ public class DeviceController {
         }
     }
 
+
     @GetMapping("/user/{userName}")
     public ResponseEntity<List<Device>> getDevicesByUserName(@PathVariable String userName) {
         // Check authentication
@@ -134,6 +160,7 @@ public class DeviceController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return new ResponseEntity<>(deviceService.getDevicesByUserName(userName), HttpStatus.OK);
+        List<Device> devices = deviceService.getDevicesByUserName(userName);
+        return new ResponseEntity<>(devices, HttpStatus.OK);
     }
 }

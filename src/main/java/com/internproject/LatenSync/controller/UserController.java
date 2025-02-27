@@ -5,9 +5,12 @@ import com.internproject.LatenSync.entity.LoginRequest;
 import com.internproject.LatenSync.entity.User;
 import com.internproject.LatenSync.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -65,5 +68,17 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserByUsername(@PathVariable("id") String userName){
         return new ResponseEntity<>(userService.getUserByUserName(userName),HttpStatus.OK);
+    }
+
+    @GetMapping("/currentUser")
+    public ResponseEntity<User> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = authentication.getName();
+        User user = userService.getUserByUserName(username);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

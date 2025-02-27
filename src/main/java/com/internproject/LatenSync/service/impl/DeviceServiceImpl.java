@@ -77,6 +77,12 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
+    public List<Device> getAllDevices() {
+        return deviceRepository.findAll();
+    }
+
+
+    @Override
     public Long getDeviceCount() {
         return deviceRepository.count();
     }

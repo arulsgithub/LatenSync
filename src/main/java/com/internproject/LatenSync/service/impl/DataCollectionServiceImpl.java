@@ -168,8 +168,9 @@ public class DataCollectionServiceImpl implements DataCollectionService {
     @Override
     public String getDeviceStatus(double latency, double packetLoss, double jitter, double throughput) {
         if (latency == 0 && packetLoss == 0) return "Excellent";
-        else if ((latency > 0 && latency <= 50) && (packetLoss > 0 && packetLoss <= 50)) return "Good";
-        else return "Bad";
+        else if ((latency > 0 && latency <= 50) && (packetLoss >=0 && packetLoss <= 50)) return "Good";
+        else if ((latency>50 && latency<=70) && packetLoss==0) return "Bad";
+        else return "Critical";
     }
 
     public void sendMail(String userEmail, double latency, double jitter, double throughput, double packetLoss, String deviceId){

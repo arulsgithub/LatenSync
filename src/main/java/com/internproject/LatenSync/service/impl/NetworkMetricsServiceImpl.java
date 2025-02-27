@@ -5,6 +5,7 @@ import com.internproject.LatenSync.exception.ResourceNotFoundException;
 import com.internproject.LatenSync.repository.NetworkMetricsRepository;
 import com.internproject.LatenSync.service.NetworkMetricsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -37,4 +38,8 @@ public class NetworkMetricsServiceImpl implements NetworkMetricsService {
         return networkMetricsRepository.findByDeviceId(deviceId);
     }
 
+    @Override
+    public List<NetworkMetrics> getMetricsByDeviceId(String deviceId, int limit) {
+        return networkMetricsRepository.findByDeviceIdOrderByTimestampDesc(deviceId, PageRequest.of(0, limit));
+    }
 }

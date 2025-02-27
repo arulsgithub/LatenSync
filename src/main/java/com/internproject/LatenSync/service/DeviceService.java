@@ -16,7 +16,7 @@ public interface DeviceService {
     Device getDeviceById(String id);
     List<String> getAllDeviceIds();
     List<Device> getDevicesByUserName(String userName);
-
+    List<Device> getAllDevices();
 
     List<Device> parseAndSaveExcel(MultipartFile file) throws IOException;
     Long getDeviceCount();
