@@ -39,11 +39,11 @@ function NavBar() {
               <FaHome size={24} />
             )}
           </Link>
-          <Link to="/devicepage" className="nav-link p-20 ">
+          <Link to="/device/:id" className="nav-link p-20 ">
             {isOpen ? (
               <div className="flex flex-row">
                 <LuChartNoAxesCombined size={24} />
-                <p className="pl-2">Device page</p>
+                <p className="pl-2">Performance</p>
               </div>
             ) : (
               <LuChartNoAxesCombined size={24} />
