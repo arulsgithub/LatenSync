@@ -27,7 +27,7 @@ public class Device {
     private String mac_addr;
 
     @Column(length = 100)
-    private String device_status;
+    private String location;
 
     @Column(name = "user_name", length = 100)
     @JsonProperty("user_name")

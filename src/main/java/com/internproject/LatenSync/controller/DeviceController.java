@@ -10,12 +10,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -69,7 +76,7 @@ public class DeviceController {
         }
 
         Device savedDevice = deviceService.addDevice(device);
-        return new ResponseEntity<>(savedDevice, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedDevice, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -92,7 +99,36 @@ public class DeviceController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return new ResponseEntity<>(deviceService.getDeviceById(d_id), HttpStatus.FOUND);
+        return new ResponseEntity<>(deviceService.getDeviceById(d_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getDeviceCount(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return new ResponseEntity<>(deviceService.getDeviceCount(),HttpStatus.OK);
+    }
+
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadDevices(@RequestParam("file") MultipartFile file) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("File is empty!");
+        }
+
+        try {
+            List<Device> savedDevices = deviceService.parseAndSaveExcel(file);
+            return ResponseEntity.ok("Successfully added " + savedDevices.size() + " devices!");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing file: " + e.getMessage());
+        }
     }
 
     @GetMapping("/user/{userName}")

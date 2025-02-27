@@ -64,7 +64,7 @@ public class NetworkMetricsController {
                     if (!latestMetrics.isEmpty()) {
                         emitter.send(latestMetrics.getLast());
                     }
-                    Thread.sleep(1200);
+                    Thread.sleep(3000);
                 }
             } catch (IOException | InterruptedException e) {
                 emitter.completeWithError(e);
