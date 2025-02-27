@@ -15,6 +15,6 @@ public class Alert {
     @Column(length = 250)
     private String device_id;
     private Timestamp time;
-    @Column(length = 200)
+    @Column(columnDefinition = "TEXT")
     private String message;
 }

@@ -69,11 +69,6 @@ public class DeviceController {
 
     @PostMapping("/add")
     public ResponseEntity<Device> addDevice(@RequestBody Device device) {
-        // Check authentication
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
 
         Device savedDevice = deviceService.addDevice(device);
         return new ResponseEntity<>(savedDevice, HttpStatus.OK);
