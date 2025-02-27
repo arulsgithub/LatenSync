@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import { useAuth } from "../components/AuthContext";
-import MetricsGraph from "./MetricsGraph"; // Ensure this component is imported
+import MetricsGraph from "./MetricsGraph";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function MetricsTable({
   setSelectedDevice,
@@ -17,31 +19,35 @@ export default function MetricsTable({
   const [error, setError] = useState(null);
   const { credentials, isAuthenticated } = useAuth();
 
-  // Debug logging for props
-  console.log("MetricsTable Props:", {
-    selectedDevice,
-    selectedMetric,
-    hasSetSelectedDevice: typeof setSelectedDevice === "function",
-    hasSetSelectedMetric: typeof setSelectedMetric === "function",
-  });
+  // Function to show critical alert
+  const showCriticalAlert = (deviceId, latency, packetLoss) => {
+    toast.error(
+      <div>
+        <h3 className="font-bold">Critical Alert!</h3>
+        <p>Device ID: {deviceId}</p>
+        <p>Latency: {latency} ms</p>
+        <p>Packet Loss: {packetLoss}%</p>
+      </div>,
+      {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "bg-red-100 border-l-4 border-red-500 text-red-700 p-4",
+        bodyClassName: "text-sm",
+      }
+    );
+  };
 
-  // Fetch all device IDs
+  // Fetch available devices when component mounts and user is authenticated
   useEffect(() => {
-    if (!isAuthenticated()) {
-      setError("Authentication required. Please log in.");
-      return;
-    }
+    if (!isAuthenticated()) return;
 
     setLoading(true);
-    setError(null);
-
-    // Use the stored credentials for the Authorization header
     const authHeader = `Basic ${credentials}`;
-
-    console.log(
-      "Fetching device IDs with auth:",
-      authHeader.substring(0, 10) + "..."
-    );
 
     axios
       .get("http://localhost:8080/api/devices", {
@@ -50,30 +56,17 @@ export default function MetricsTable({
         },
       })
       .then((response) => {
-        console.log("Device IDs received:", response.data);
+        console.log("Devices fetched:", response.data);
+        // Directly set the device IDs from the response
         setDeviceIds(response.data);
-
-        // Auto-select the first device if setSelectedDevice is provided
-        if (
-          response.data.length > 0 &&
-          typeof setSelectedDevice === "function"
-        ) {
-          setSelectedDevice(response.data[0]);
-        }
-
-        setError(null);
+        setLoading(false);
       })
-      .catch((error) => {
-        if (error.response && error.response.status === 401) {
-          console.error("Authentication failed:", error);
-          setError("Authentication failed. Please log in again.");
-        } else {
-          console.error("Error fetching device IDs:", error);
-          setError("Failed to fetch device IDs. Please try again.");
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [credentials, isAuthenticated, setSelectedDevice]);
+      .catch((err) => {
+        console.error("Error fetching devices:", err);
+        setError("Failed to load devices. Please try again.");
+        setLoading(false);
+      });
+  }, [isAuthenticated, credentials]);
 
   // Start streaming and collect data
   useEffect(() => {
@@ -139,6 +132,20 @@ export default function MetricsTable({
                       const data = JSON.parse(jsonData);
                       console.log(`Received Data for ${deviceId}:`, data);
 
+                      // Check if the status is critical
+                      if (data.status === "Critical") {
+                        console.log(
+                          "Critical alert triggered for",
+                          data.deviceId,
+                          data
+                        );
+                        showCriticalAlert(
+                          data.deviceId,
+                          data.latency,
+                          data.packet_loss
+                        );
+                      }
+
                       setMetrics((prevMetrics) => {
                         const updated = [...prevMetrics];
                         const index = updated.findIndex(
@@ -190,43 +197,20 @@ export default function MetricsTable({
     };
   }, [deviceIds, credentials, isAuthenticated]);
 
-  // Fetch Device Details when a device is selected
-  useEffect(() => {
-    if (!selectedDevice || !isAuthenticated()) return;
-
-    const authHeader = `Basic ${credentials}`;
-
-    axios
-      .get(`http://localhost:8080/api/devices/${selectedDevice}`, {
-        headers: {
-          Authorization: authHeader,
-        },
-      })
-      .then((response) => setDeviceDetails(response.data))
-      .catch((error) => console.error("Error fetching device details:", error));
-  }, [selectedDevice, credentials, isAuthenticated]);
-
-  // Debug logging for state changes
-  useEffect(() => {
-    console.log("State updated:", {
-      metrics: metrics.length,
-      deviceIds: deviceIds.length,
-      selectedDevice,
-      selectedMetric,
-      deviceDetails: deviceDetails ? "loaded" : "not loaded",
-      isAuthenticated: isAuthenticated(),
-    });
-  }, [
-    metrics,
-    deviceIds,
-    selectedDevice,
-    selectedMetric,
-    deviceDetails,
-    isAuthenticated,
-  ]);
-
   return (
     <div className="bg-[#3C5B6F] p-4 rounded-lg shadow-lg">
+      <ToastContainer />
+
+      {/* Error message display */}
+      {error && (
+        <div
+          className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4"
+          role="alert"
+        >
+          <p>{error}</p>
+        </div>
+      )}
+
       {loading && (
         <p className="text-gray-400 text-center">Loading devices...</p>
       )}
@@ -296,8 +280,8 @@ export default function MetricsTable({
         </tbody>
       </table>
 
-      {/* Show deviceDetails regardless of selectedMetric */}
-      {selectedMetric && deviceDetails && (
+      {/* Show deviceDetails when a device is selected and details are available */}
+      {selectedDevice && deviceDetails && (
         <div className="mt-4 p-4 bg-gray-800 text-white rounded-lg shadow-lg">
           <h3 className="text-xl font-bold">
             Device Details - {selectedDevice}

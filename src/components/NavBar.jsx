@@ -1,15 +1,23 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaBars, FaTimes, FaHome } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes, FaHome, FaSignOutAlt } from "react-icons/fa";
 import { TiCloudStorage, TiChartPie } from "react-icons/ti";
 import { TbAlertCircle } from "react-icons/tb";
-import { IoMdArrowRoundBack } from "react-icons/io"; // Importing icons
-import "../css/navbar.css"; // Ensure you style accordingly
-import { LuRouter } from "react-icons/lu";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import "../css/navbar.css";
 import { LuChartNoAxesCombined } from "react-icons/lu";
+
+import { useAuth } from "../components/AuthContext";
 
 function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="flex">
@@ -28,22 +36,26 @@ function NavBar() {
         </button>
 
         {/* Sidebar Links */}
-        <div className="flex flex-col absolute left-2 pl-1 space-x-5 space-y-15 poppins-bold">
-          <Link to="/" className="nav-link p-20 ">
+        <div className="flex flex-col space-y-4">
+          {" "}
+          {/* Reduced space-y from space-y-15 to space-y-4 */}
+          <Link to="/" className="nav-link">
             {isOpen ? (
-              <div className="flex flex-row">
-                <FaHome size={24} />
-                <p className="pl-2 pt-1">Home</p>
+              <div className="flex items-center gap-3">
+                {" "}
+                {/* Reduced gap between icon and text */}
+                <FaHome size={24} /> {/* Reduced icon size */}
+                <p>Home</p>
               </div>
             ) : (
               <FaHome size={24} />
             )}
           </Link>
-          <Link to="/device/:id" className="nav-link p-20 ">
+          <Link to="/device/:id" className="nav-link">
             {isOpen ? (
-              <div className="flex flex-row">
+              <div className="flex items-center gap-3">
                 <LuChartNoAxesCombined size={24} />
-                <p className="pl-2">Performance</p>
+                <p>Performance</p>
               </div>
             ) : (
               <LuChartNoAxesCombined size={24} />
@@ -51,9 +63,9 @@ function NavBar() {
           </Link>
           <Link to="/devices" className="nav-link">
             {isOpen ? (
-              <div className="flex flex-row">
+              <div className="flex items-center gap-3">
                 <TiCloudStorage size={24} />
-                <p className="pl-2 ">Device</p>
+                <p>Device</p>
               </div>
             ) : (
               <TiCloudStorage size={24} />
@@ -61,24 +73,35 @@ function NavBar() {
           </Link>
           <Link to="/alerts" className="nav-link">
             {isOpen ? (
-              <div className="flex flex-row">
+              <div className="flex items-center gap-3">
                 <TbAlertCircle size={24} />
-                <p className="pl-2 pl-2">Alerts</p>
+                <p>Alerts</p>
               </div>
             ) : (
               <TbAlertCircle size={24} />
             )}
           </Link>
-          <Link to="/dashboard" className="nav-link p-0">
+          <Link to="/dashboard" className="nav-link">
             {isOpen ? (
-              <div className="flex flex-row">
+              <div className="flex items-center gap-3">
                 <TiChartPie size={24} />
-                <p className="pl-2 pl-2">Dashboard</p>
+                <p>Dashboard</p>
               </div>
             ) : (
               <TiChartPie size={24} />
             )}
           </Link>
+          {/* Logout Button */}
+          <button className="nav-link text-left w-full" onClick={handleLogout}>
+            {isOpen ? (
+              <div className="flex items-center gap-3">
+                <FaSignOutAlt size={24} />
+                <p>Logout</p>
+              </div>
+            ) : (
+              <FaSignOutAlt size={24} />
+            )}
+          </button>
         </div>
       </div>
     </div>

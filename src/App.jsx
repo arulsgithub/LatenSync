@@ -11,6 +11,8 @@ import DeviceMetrics from "./components/DeviceMetrics";
 import SignIn from "./pages/SignIn";
 import NavBar from "./components/NavBar";
 
+import DownloadMetrics from "./components/DownloadMetrics";
+
 function App() {
   const { user } = useAuth();
 
@@ -67,6 +69,14 @@ function App() {
           element={
             <ProtectedRoute>
               <DevicePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/download"
+          element={
+            <ProtectedRoute>
+              <DownloadMetrics />
             </ProtectedRoute>
           }
         />

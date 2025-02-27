@@ -56,8 +56,9 @@ export default function MetricsGraph({ deviceId, metric }) {
             {
               label: metric.charAt(0).toUpperCase() + metric.slice(1),
               data: graphData.data,
-              borderColor: "red",
-              fill: false,
+              borderColor: "yellow",
+              backgroundColor: "rgba(186, 190, 74, 0.3)",
+              fill: true,
             },
           ],
         }}
